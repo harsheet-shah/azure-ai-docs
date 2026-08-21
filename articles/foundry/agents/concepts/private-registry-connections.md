@@ -34,6 +34,7 @@ Distribution.
 - An Azure subscription.
 - A Foundry project with `Foundry Project Manager` role. See [Hosted agent permissions reference](hosted-agent-permissions.md).
 - [Azure CLI](/cli/azure/install-azure-cli) installed and authenticated.
+- Docker Desktop or Docker Engine with API version 1.40 or later.
 - A private container registry with OIDC support.
 - A container image in your registry.
 - Permissions to configure OIDC in your registry.
@@ -278,6 +279,8 @@ azd ai agent invoke "<prompt>"
 | Token exchange fails with "invalid_subject" or "invalid_audience" | OIDC claim mappings don't match | Confirm issuer, subject, and audience values match in Entra ID and your registry |
 | Image pull fails after successful token exchange | Registry identity lacks permissions | Ensure the registry identity has read access to your image repository |
 | Agent deployment fails with connection timeout | VNet isolation blocks registry access | Set up a private link to allow access to the registry token endpoint |
+| `azd deploy` fails during packaging with `client version 1.38 is too old` | Docker API version is below the minimum required by the Oryx builder image pull | Upgrade Docker Desktop or Docker Engine, unset `DOCKER_API_VERSION` if it is pinned, and rerun `azd deploy` |
+| `azd deploy` builds from source instead of using your prebuilt private image | Current local `azd` and extension build doesn't honor private-image passthrough settings | Update `azd` and `azure.ai.agents` extension to the latest build, then verify `azure.yaml` includes `docker.imagePassthrough: true` and `registryConnectionId` |
 
 ## Next steps
 
